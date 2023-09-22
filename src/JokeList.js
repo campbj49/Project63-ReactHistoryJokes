@@ -10,6 +10,7 @@ function JokeList({numJokesToGet = 5}){
   const [jokes, setJokes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  //effect for initial page load and new joke button press
   useEffect(function getJokesOnRender(){
     async function getJokes() {
       try {
@@ -40,7 +41,7 @@ function JokeList({numJokesToGet = 5}){
     getJokes();
   },[isLoading])
 
-  //onClick function for primary button
+  //onClick function for primary button to trigger re-render
   function generateNewJokes(){
     setIsLoading(true);
     setJokes([]);
@@ -52,6 +53,19 @@ function JokeList({numJokesToGet = 5}){
     console.log("The jokes should be sorted now");
     sortedJokes = [...jokes].sort((a, b) => b.votes - a.votes);
   },[jokes])
+
+  //function that lets Joke components communicate with the parent
+  function updateScore(id, votes){
+    console.log(votes);
+    let updatedJokes = [];
+    for(let joke of [...jokes]){
+      if(joke.id ===id) joke.votes = votes;
+      updatedJokes.push(joke);
+    }
+    setJokes(updatedJokes);
+  }
+
+  //render options
   if (isLoading) {
     return (
       <div className="loading">
@@ -74,6 +88,7 @@ function JokeList({numJokesToGet = 5}){
           text={j.joke}
           key={j.id}
           id={j.id}
+          updateScore = {updateScore}
         />
       ))}
     </div>
