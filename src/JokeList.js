@@ -50,13 +50,11 @@ function JokeList({numJokesToGet = 5}){
   //effect that runs on every render to make sure the list is sorted
   let sortedJokes = [...jokes].sort((a, b) => b.votes - a.votes);
   useEffect(function sortJokes(){
-    console.log("The jokes should be sorted now");
     sortedJokes = [...jokes].sort((a, b) => b.votes - a.votes);
   },[jokes])
 
   //function that lets Joke components communicate with the parent
   function updateScore(id, votes){
-    console.log(votes);
     let updatedJokes = [];
     for(let joke of [...jokes]){
       if(joke.id ===id) joke.votes = votes;
